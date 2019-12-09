@@ -4,6 +4,8 @@ VueJS app using Foursquare API to list and see detail (reviews,photos,adress)
 of a bar in a city of your choice ! <br>
 :construction: Get a random bar by clicking the wheel !  :construction:
 
+:books: **Made this project to learn advanced VueJS**  :books:
+
 ## Prerequisites :exclamation:
 Get yourself the keys of foursquare api (For developpement only) <br>
 [Foursquare API](https://developer.foursquare.com/) 
