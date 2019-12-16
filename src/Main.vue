@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
+    <nav-bar></nav-bar>
     <bar-list
       @affiche-detail-bar="afficheDetailBar"
       v-if="mode === 'L'"
@@ -12,6 +12,7 @@
 <script>
 import BarList from "./components/BarList.vue";
 import BarDetail from "./components/BarDetail.vue";
+import NavBar from "./components/NavBar.vue";
 
 
 
@@ -36,7 +37,8 @@ export default {
   },
   components: {
     BarList,
-    BarDetail
+    BarDetail,
+    NavBar
   }
 };
 </script>
@@ -47,7 +49,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
 }
 @import'~bootstrap/dist/css/bootstrap.css'
 </style>
