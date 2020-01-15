@@ -3,6 +3,11 @@
     <h1 class="barName ta-center">{{ bar.name }}</h1>
     <h6 class="rating ta-center bold">Note : {{ barDetail.rating }} / 10</h6>
     <div class="row"></div>
+    <div ng-if="photos.count >0"  >
+      <img  v-for="photo in photos.items"
+        v-bind:photo="photo"
+        v-bind:key="photo.id" :src="getSrc(photo)">
+    </div>
     <span class="ta-center"
       ><a @click="retourListe">Retour à la liste </a></span
     >
@@ -11,34 +16,47 @@
 
 <script>
 import axios from "axios";
-import { CLIENT_ID } from "./BarList.vue";
-import { CLIENT_SECRET } from "./BarList.vue";
+
 
 export default {
   data: function() {
     return {
       barDetail: {},
-      urlVenueDetail: "https://api.foursquare.com/v2/venues/"
+      urlVenueDetail: "https://api.foursquare.com/v2/venues/",
     };
   },
   props: ["bar"],
   created: function() {
     this.getDetailFromApi();
+    this.getPhotosFromApi();
   },
   methods: {
     retourListe: function() {
       this.$emit("changeMode", "L");
     },
+    getPhotosFromApi: function() {
+      let params = this.getAuthParams();
+      params.limit = 200;
+      if (localStorage[this.bar.id+'/photos']) {
+        this.photos = JSON.parse(localStorage.getItem(this.bar.id+'/photos'));
+        console.log('this.photos local',this.photos);
+        return;
+      }
+      axios.get(this.urlVenueDetail + this.bar.id +'/photos', { params: params }).then(
+        function(response) {
+          this.photos = response.data.response.photos;
+          console.log('this.photos via ajax',this.photos);
+          localStorage.setItem(this.bar.id+'/photos', JSON.stringify(this.photos));
+        }.bind(this)
+      );
+    },
+    getSrc: function(photo){
+      return photo.prefix+photo.height + 'x' + photo.width  + photo.suffix;
+    },
     getDetailFromApi: function() {
-      let aujd = new Date();
-      let params = {
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        v: aujd.getFullYear() + "" + aujd.getMonth() + 1 + "" + aujd.getDate()
-      };
+      let params = this.getAuthParams();
       if (localStorage[this.bar.id]) {
         this.barDetail = JSON.parse(localStorage.getItem(this.bar.id));
-        console.log('this.barDetail',this.barDetail);
         return;
       }
       axios.get(this.urlVenueDetail + this.bar.id, { params: params }).then(
@@ -53,6 +71,14 @@ export default {
 </script>
 
 <style>
+img {
+  width: 450px;
+	max-width: 100%;
+	height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .global {
   margin-left: auto;
   margin-right: auto;

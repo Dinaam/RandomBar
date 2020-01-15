@@ -43,6 +43,7 @@ const categoryIdBar = "4bf58dd8d48988d116941735";
 
 export default {
   data: function() {
+    console.log('data',this.barlist)
     return {
       ville: null,
       afficheErreur: null,

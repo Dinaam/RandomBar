@@ -3,7 +3,7 @@
     <nav-bar></nav-bar>
     <bar-list
       @affiche-detail-bar="afficheDetailBar"
-      v-if="mode === 'L'"
+      v-show="mode === 'L'"
     ></bar-list>
     <bar-detail :bar="bar" @changeMode="changeMode" v-if="mode === 'D'"></bar-detail>
   </div>
@@ -13,8 +13,6 @@
 import BarList from "./components/BarList.vue";
 import BarDetail from "./components/BarDetail.vue";
 import NavBar from "./components/NavBar.vue";
-
-
 
 
 export default {
@@ -32,7 +30,8 @@ export default {
     },
     changeMode: function(mode){
       this.mode = mode;
-    }
+    },
+    
     
   },
   components: {
