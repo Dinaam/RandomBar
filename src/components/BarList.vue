@@ -9,18 +9,21 @@
           placeholder="Ville"
         />
       </div>
-      <button class="btn btn-bleu" @click="getListBarFromApi()">Ok</button>
+      <button class="btn btn-bleu" @click="getListBar()">Voir la liste</button>
+      <button class="btn btn-vert margeGauche " @click="getRandomBar()">
+        Random
+      </button>
     </div>
-      <div class="info">
-        <span class="alert alert-info" v-if="barlist.length == 0 && afficheErreur == false"
-          >Aucun résultat !
-        </span>
-        <span
-          class="alert alert-danger"
-          role="alert"
-          v-if="afficheErreur == true"
-          >Une erreur est survenue</span>
-      </div>
+    <div class="info">
+      <span
+        class="alert alert-info"
+        v-if="barlist.length == 0 && afficheErreur == false"
+        >Aucun résultat !
+      </span>
+      <span class="alert alert-danger" role="alert" v-if="afficheErreur == true"
+        >Une erreur est survenue</span
+      >
+    </div>
     <ol v-if="barlist">
       <bar-item
         v-for="item in barlist"
@@ -43,7 +46,6 @@ const categoryIdBar = "4bf58dd8d48988d116941735";
 
 export default {
   data: function() {
-    console.log('data',this.barlist)
     return {
       ville: null,
       afficheErreur: null,
@@ -54,6 +56,44 @@ export default {
   methods: {
     afficheDetailBar: function(barItem) {
       this.$emit("affiche-detail-bar", barItem);
+    },
+    getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    },
+    getRandomBar: function() {
+      if (this.barlist.length == 0) {
+        this.getListBarFromApi()
+          .then(
+            function(response) {
+              this.barlistTmp = response.data.response.venues;
+              this.afficheDetailBar(this.barlistTmp[this.getRandomInt(0,this.barlistTmp.length - 1)]);
+            }.bind(this)
+          )
+          .catch(
+            function(err) {
+              this.afficheErreur = true;
+              console.error(err);
+            }.bind(this)
+          );
+      } else {
+        this.afficheDetailBar(this.barlist[this.getRandomInt(0,this.barlist.length - 1)]);
+      }
+    },
+    getListBar() {
+      this.getListBarFromApi()
+        .then(
+          function(response) {
+            this.barlist = response.data.response.venues;
+            this.afficheErreur = false;
+          }.bind(this)
+        )
+        .catch(
+          function() {
+            this.afficheErreur = true;
+          }.bind(this)
+        );
     },
     getListBarFromApi() {
       if (!this.ville) {
@@ -70,19 +110,7 @@ export default {
         limit: 1000,
         categoryId: categoryIdBar
       };
-      axios
-        .get(this.urlVenuesSearch, { params: params })
-        .then(
-          function(response) {
-            this.barlist = response.data.response.venues;
-            this.afficheErreur = false;
-          }.bind(this)
-        )
-        .catch(
-          function() {
-            this.afficheErreur = true;
-          }.bind(this)
-        );
+      return axios.get(this.urlVenuesSearch, { params: params });
     }
   },
   components: {
@@ -95,11 +123,19 @@ export default {
 .form {
   margin-left: 20px !important;
 }
+.margeGauche {
+  margin-left: 10px;
+}
 .btn-bleu {
   background-color: #34495e !important;
   color: white !important;
 }
-.info{
+.btn-vert {
+  background-color: #27ae60 !important;
+  color: white !important;
+}
+
+.info {
   margin-top: 25px;
   margin-left: 35px;
 }

@@ -22,6 +22,7 @@ export default {
   data: function() {
     return {
       barDetail: {},
+      photos:[],
       urlVenueDetail: "https://api.foursquare.com/v2/venues/",
     };
   },
@@ -39,13 +40,11 @@ export default {
       params.limit = 200;
       if (localStorage[this.bar.id+'/photos']) {
         this.photos = JSON.parse(localStorage.getItem(this.bar.id+'/photos'));
-        console.log('this.photos local',this.photos);
         return;
       }
       axios.get(this.urlVenueDetail + this.bar.id +'/photos', { params: params }).then(
         function(response) {
           this.photos = response.data.response.photos;
-          console.log('this.photos via ajax',this.photos);
           localStorage.setItem(this.bar.id+'/photos', JSON.stringify(this.photos));
         }.bind(this)
       );
