@@ -1,12 +1,16 @@
 <template>
   <div class="bar global">
     <h1 class="barName ta-center">{{ bar.name }}</h1>
-    <p class="ta-center tip" v-for="tip in tips.items"
-        v-bind:tip="tip"
-        v-bind:key="tip.id">{{tip.text}}
-        <br>
-        
-        </p>
+    <p class="ta-center">{{ bar.location.address }}</p>
+    <p
+      class="ta-center tip"
+      v-for="tip in tips.items"
+      v-bind:tip="tip"
+      v-bind:key="tip.id"
+    >
+      {{ tip.text }}
+      <br />
+    </p>
     <h6 class="rating ta-center bold">Note : {{ barDetail.rating }} / 10</h6>
     <div ng-if="photos.count >0">
       <img
@@ -16,8 +20,7 @@
         :src="getSrc(photo)"
       />
     </div>
-      
-        
+
     <span class="ta-center"
       ><a @click="retourListe">Retour à la liste </a></span
     >
@@ -32,7 +35,7 @@ export default {
     return {
       barDetail: {},
       photos: [],
-      tips:[],
+      tips: [],
       urlVenueDetail: "https://api.foursquare.com/v2/venues/"
     };
   },
@@ -88,12 +91,17 @@ export default {
         return;
       }
       params.limit = 100;
-      axios.get(this.urlVenueDetail + this.bar.id + "/tips", { params: params }).then(
-        function(response) {
-          this.tips = response.data.response.tips;
-          localStorage.setItem(this.bar.id +"/tips", JSON.stringify(this.tips));
-        }.bind(this)
-      );
+      axios
+        .get(this.urlVenueDetail + this.bar.id + "/tips", { params: params })
+        .then(
+          function(response) {
+            this.tips = response.data.response.tips;
+            localStorage.setItem(
+              this.bar.id + "/tips",
+              JSON.stringify(this.tips)
+            );
+          }.bind(this)
+        );
     }
   }
 };
@@ -124,9 +132,9 @@ img {
   display: block;
   text-align: center;
 }
-.tip{
+.tip {
   margin-left: 25%;
-  background-color: rgba(255, 127, 80,0.4);
+  background-color: rgba(255, 127, 80, 0.4);
   padding: 15px;
   width: 50%;
 }

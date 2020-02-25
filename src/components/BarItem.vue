@@ -3,7 +3,7 @@
     <h3 class="barName">{{ bar.name }}</h3>
     {{ bar.location.address }} <br />
     <a v-on:click="clickHandler(bar)">Voir plus</a>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -31,6 +31,5 @@ a:hover {
 
 .barItem {
   margin-bottom: 40px;
-
 }
 </style>
