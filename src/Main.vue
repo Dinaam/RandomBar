@@ -5,7 +5,11 @@
       @affiche-detail-bar="afficheDetailBar"
       v-show="mode === 'L'"
     ></bar-list>
-    <bar-detail :bar="bar" @changeMode="changeMode" v-if="mode === 'D'"></bar-detail>
+    <bar-detail
+      :bar="bar"
+      @changeMode="changeMode"
+      v-if="mode === 'D'"
+    ></bar-detail>
   </div>
 </template>
 
@@ -13,7 +17,6 @@
 import BarList from "./components/BarList.vue";
 import BarDetail from "./components/BarDetail.vue";
 import NavBar from "./components/NavBar.vue";
-
 
 export default {
   name: "app",
@@ -25,15 +28,13 @@ export default {
 
   methods: {
     afficheDetailBar: function(barItem) {
-      this.changeMode('D');
-      console.log('barItem',barItem);
+      this.changeMode("D");
+      console.log("barItem", barItem);
       this.bar = barItem;
     },
-    changeMode: function(mode){
+    changeMode: function(mode) {
       this.mode = mode;
-    },
-    
-    
+    }
   },
   components: {
     BarList,
@@ -45,11 +46,11 @@ export default {
 
 <style>
 #app {
-  font-family: sans-serif,"Avenir", Helvetica, Arial ;
+  font-family: sans-serif, "Avenir", Helvetica, Arial;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   overflow: hidden;
 }
-@import'~bootstrap/dist/css/bootstrap.css'
+@import "~bootstrap/dist/css/bootstrap.css";
 </style>

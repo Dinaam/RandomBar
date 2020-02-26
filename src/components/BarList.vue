@@ -68,7 +68,11 @@ export default {
           .then(
             function(response) {
               this.barlistTmp = response.data.response.venues;
-              this.afficheDetailBar(this.barlistTmp[this.getRandomInt(0,this.barlistTmp.length - 1)]);
+              this.afficheDetailBar(
+                this.barlistTmp[
+                  this.getRandomInt(0, this.barlistTmp.length - 1)
+                ]
+              );
             }.bind(this)
           )
           .catch(
@@ -78,7 +82,9 @@ export default {
             }.bind(this)
           );
       } else {
-        this.afficheDetailBar(this.barlist[this.getRandomInt(0,this.barlist.length - 1)]);
+        this.afficheDetailBar(
+          this.barlist[this.getRandomInt(0, this.barlist.length - 1)]
+        );
       }
     },
     getListBar() {
