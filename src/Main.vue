@@ -50,7 +50,7 @@ export default {
   components: {
     BarList,
     BarDetail,
-    FontAwesomeIcon
+    FontAwesomeIcon,
   }
 };
 </script>
