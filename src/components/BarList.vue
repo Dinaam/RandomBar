@@ -25,7 +25,11 @@
         >Une erreur est survenue</span
       >
     </div>
-    <div id="wheel"><wheel :barlist="barlist" v-if="displayWheel"></wheel></div>
+    <modal v-show="isModalVisible" @close="closeModal" />
+    <div id="wheel" class="row">
+      <wheel :barlist="barlist" v-if="displayWheel"></wheel>
+      <h3  @click="showModal"></h3>
+    </div>
     <ol class="hidden" v-if="barlist && mode == 'L'">
       <bar-item
         v-for="item in barlist"
@@ -41,6 +45,7 @@
 import BarItem from "./BarItem";
 import axios from "axios";
 import Wheel from "./Wheel.vue";
+import Modal from "./Modal.vue";
 
 export const CLIENT_ID = process.env.VUE_APP_CLIENT_ID;
 export const CLIENT_SECRET = process.env.VUE_APP_CLIENT_SECRET;
@@ -55,10 +60,17 @@ export default {
       afficheErreur: null,
       barlist: [],
       mode: "R",
-      urlVenuesSearch: "https://api.foursquare.com/v2/venues/search",
+      isModalVisible: false,
+      urlVenuesSearch: "https://api.foursquare.com/v2/venues/search"
     };
   },
   methods: {
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
     afficheDetailBar: function(barItem) {
       this.$emit("affiche-detail-bar", barItem);
     },
@@ -134,15 +146,16 @@ export default {
         intent: "browse",
         radius: 1000,
         limit: 1000,
-        categoryId: categoryIdBar,
+        categoryId: categoryIdBar
       };
       return axios.get(this.urlVenuesSearch, { params: params });
-    },
+    }
   },
   components: {
     BarItem,
-    Wheel
-  },
+    Wheel,
+    Modal
+  }
 };
 </script>
 
@@ -160,6 +173,4 @@ export default {
   margin-top: 25px;
   margin-left: 35px;
 }
-
-
 </style>

@@ -15,12 +15,12 @@ export default {
       rotation: 0,
       oldrotation: 0,
       picked: 100000,
-      color: d3.scaleOrdinal(d3.schemeSet3),
+      color: d3.scaleOrdinal(d3.schemeSet3)
     };
   },
   props: ["barlist"],
   watch: {
-    barlist: "renderSvg",
+    barlist: "renderSvg"
   },
   computed: {
     w() {
@@ -31,7 +31,7 @@ export default {
     },
     r() {
       return Math.min(this.w, this.h) / 2;
-    },
+    }
   },
 
   mounted() {
@@ -93,7 +93,7 @@ export default {
       // add the text
       arcs
         .append("text")
-        .attr("transform", (d) => {
+        .attr("transform", d => {
           d.innerRadius = 0;
           d.outerRadius = this.r;
           d.angle = (d.startAngle + d.endAngle) / 2;
@@ -171,9 +171,9 @@ export default {
           });
       };
       container.on("click", spin);
-    },
+    }
   },
-  components: {},
+  components: {}
 };
 </script>
 
