@@ -14,6 +14,7 @@ export default {
       padding: { top: -50, right: 80, bottom: 20, left: 20 },
       rotation: 0,
       oldrotation: 0,
+      oldpick: [],
       picked: 100000,
       color: d3.scaleOrdinal(d3.schemeSet3)
     };
@@ -43,9 +44,6 @@ export default {
       this.renderSvg();
     },
     renderSvg() {
-      console.log("w", this.w);
-      console.log("h", this.h);
-      console.log("r", this.r);
       var color = this.color;
       var data = this.barlist;
       this.svg.data([data]);
@@ -154,6 +152,18 @@ export default {
           rng = Math.floor(Math.random() * 1440 + 360);
         this.rotation = Math.round(rng / ps) * ps;
         this.rotation += 90 - Math.round(ps / 2);
+        this.picked = Math.round(data.length - (this.rotation % 360) / ps);
+        console.log(data[this.picked].name);
+        this.picked =
+          this.picked >= data.length ? this.picked % data.length : this.picked;
+
+        if (this.oldpick.indexOf(this.picked) !== -1) {
+          d3.select(this).call(spin);
+          return;
+        } else {
+          this.oldpick.push(this.picked);
+        }
+        this.rotation += 90 - Math.round(ps / 2);
         vis
           .transition()
           .duration(3000)
@@ -163,12 +173,16 @@ export default {
               return "rotate(" + i(t) + ")";
             };
           })
-          .on("end", function() {
-            //populate question
-            // d3.select("#question h1").text(data[picked].question);
-            this.oldrotation = this.rotation;
-            container.on("click", spin);
-          });
+          .on(
+            "end",
+            function() {
+              this.$emit("spin-ended");
+              console.log(data[this.picked].name);
+              this.oldrotation = this.rotation;
+              d3.select("#wheel h3").text(data[this.picked].name);
+              container.on("click", spin);
+            }.bind(this)
+          );
       };
       container.on("click", spin);
     }
@@ -179,7 +193,7 @@ export default {
 
 <style>
 #wheel {
-  margin-left: 27%;
+  margin-left: 10%;
   width: 900px;
   top: 0;
   left: 0;

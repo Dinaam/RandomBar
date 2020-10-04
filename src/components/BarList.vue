@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row form ta-center">
-      <div class="input-group col-md-3 ">
+      <div class="input-group col-md-4 ">
         <input
           type="text"
           class="form-control inputVille"
@@ -9,7 +9,7 @@
           placeholder="Ville"
         />
       </div>
-      <button class="btn btn-bleu" @click="getListBar()">Voir la liste</button>
+      <!-- <button class="btn btn-bleu" @click="getListBar()">Voir la liste</button> -->
 
       <button class="btn btn-vert margeGauche " @click="showTheWheel()">
         Voir la roue
@@ -28,7 +28,7 @@
     <modal v-show="isModalVisible" @close="closeModal" />
     <div id="wheel" class="row">
       <wheel :barlist="barlist" v-if="displayWheel"></wheel>
-      <h3  @click="showModal"></h3>
+      <h3 @click="showModal"></h3>
     </div>
     <ol class="hidden" v-if="barlist && mode == 'L'">
       <bar-item
@@ -137,17 +137,13 @@ export default {
       if (!this.ville) {
         return;
       }
-      let aujd = new Date();
-      let params = {
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        v: aujd.getFullYear() + "" + aujd.getMonth() + 1 + "" + aujd.getDate(),
-        near: this.ville + ",FR",
-        intent: "browse",
-        radius: 1000,
-        limit: 1000,
-        categoryId: categoryIdBar
-      };
+      let params = this.getAuthParams();
+      params.near = this.ville + ",FR";
+      params.intent = "browse";
+      params.radius = 1000;
+      params.limit = 1000;
+      params.categoryId = categoryIdBar;
+
       return axios.get(this.urlVenuesSearch, { params: params });
     }
   },
